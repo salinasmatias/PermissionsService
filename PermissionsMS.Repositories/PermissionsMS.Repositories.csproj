@@ -11,4 +11,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PermissionsMS.DataAccess\PermissionsMS.DataAccess.csproj" />
+    <ProjectReference Include="..\PermissionsMS.Entities\PermissionsMS.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

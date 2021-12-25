@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PermissionsMS.DataAccess;
+using PermissionsMS.Repositories;
+using PermissionsMS.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +39,8 @@ namespace PermissionsMS.Presentation
 
             var connectionString = Configuration.GetSection("ConnectionString").Value;
             services.AddDbContext<PermissionsContext>(options => options.UseSqlServer(connectionString));
+            services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<IPermissionsRepository, PermissionsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
