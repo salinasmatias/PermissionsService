@@ -41,9 +41,9 @@ namespace PermissionsMS.Repositories
             return _context.Permissions;
         }
 
-        public Permission GetPermissionByIdAsync(int id)
+        public async Task<Permission> GetPermissionByIdAsync(int id)
         {
-            return _context.Permissions.Find(id);
+            return await _context.Permissions.FindAsync(id);
         }
 
         public async Task<IEnumerable<Permission>> PaginatedGetAllPermissionsAsync(IPaginationFilter filter)

@@ -16,6 +16,6 @@ namespace PermissionsMS.Repositories.Interfaces
         IEnumerable<Permission> GetAllPermissionsAsync();
         Task<IEnumerable<Permission>> PaginatedGetAllPermissionsAsync(IPaginationFilter filter);
         int CountPermissions();
-        Permission GetPermissionByIdAsync(int id);
+        Task<Permission> GetPermissionByIdAsync(int id);
     }
 }

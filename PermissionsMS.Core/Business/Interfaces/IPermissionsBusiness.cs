@@ -11,11 +11,11 @@ namespace PermissionsMS.Core.Business.Interfaces
 {
     public interface IPermissionsBusiness
     {
-        Permission AddPermission(PermissionDtoForCreation permission);
-        Permission UpdatePermission(PermissionDtoForEdit permission);
+        Task<PermissionDtoForDisplay> AddPermission(PermissionDtoForCreation permission);
+        Task<Permission> UpdatePermission(Permission permission, PermissionDtoForEdit permissionDto);
         Permission DeletePermission(Permission permission);
         Task<IEnumerable<PermissionDtoForDisplay>> GetAllPermissionsAsync(IPaginationFilter filter);
         int CountPermissions();
-        Task<PermissionDtoForDisplay> GetPermissionByIdAsync(int id);
+        Task<Permission> GetPermissionByIdAsync(int id);
     }
 }

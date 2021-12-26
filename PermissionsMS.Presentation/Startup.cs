@@ -46,6 +46,7 @@ namespace PermissionsMS.Presentation
             services.AddDbContext<PermissionsContext>(options => options.UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IPermissionsRepository, PermissionsRepository>();
+            services.AddTransient<IPermissionTypeRepository, PermissionTypeRepository>();
             services.AddTransient<IPermissionsBusiness, PermissionsBusiness>();
             services.AddTransient<IPaginationFilter, PaginationFilter>();
             services.AddHttpContextAccessor();

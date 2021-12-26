@@ -15,21 +15,30 @@ namespace PermissionsMS.Core.Business
     public class PermissionsBusiness : IPermissionsBusiness
     {
         private readonly IPermissionsRepository _repository;
+        private readonly IPermissionTypeRepository _permissionsTypesRepository;
         private readonly IMapper _mapper;
 
-        public PermissionsBusiness(IPermissionsRepository repository, IMapper mapper)
+        public PermissionsBusiness(IPermissionsRepository repository, IPermissionTypeRepository permissionTypeRepository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _permissionsTypesRepository = permissionTypeRepository;
         }
 
-        public Permission AddPermission(PermissionDtoForCreation permission)
+        public async Task<PermissionDtoForDisplay> AddPermission(PermissionDtoForCreation permission)
         {
-            var mappedPermission = _mapper.Map<Permission>(permission);
-            mappedPermission.PermissionDate = DateTime.Now.Date;
-            _repository.AddPermission(mappedPermission);
+            var response = await _permissionsTypesRepository.GetPermissionTypeByIdAsync(permission.PermissionTypeId);
+            if (response != null)
+            {
+                var mappedPermission = _mapper.Map<Permission>(permission);
+                mappedPermission.PermissionDate = DateTime.Now.Date;
+                _repository.AddPermission(mappedPermission);
 
-            return mappedPermission;
+
+                return _mapper.Map<PermissionDtoForDisplay>(mappedPermission);
+            }
+
+            return null;
         }
 
         public int CountPermissions()
@@ -51,17 +60,24 @@ namespace PermissionsMS.Core.Business
             return mappedPermissions;
         }
 
-        public Task<PermissionDtoForDisplay> GetPermissionByIdAsync(int id)
+        public async Task<Permission> GetPermissionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetPermissionByIdAsync(id);
         }
 
-        public Permission UpdatePermission(PermissionDtoForEdit permission)
+        public async Task<Permission> UpdatePermission(Permission permission, PermissionDtoForEdit permissionDto)
         {
-            var mappedPermission = _mapper.Map<Permission>(permission);
-            _repository.UpdatePermission(mappedPermission);
+            var response = await _permissionsTypesRepository.GetPermissionTypeByIdAsync(permissionDto.PermissionTypeId);
+            
+            if(response != null)
+            {
+                var mappedPermission = _mapper.Map(permissionDto, permission);
+                _repository.UpdatePermission(mappedPermission);
 
-            return mappedPermission;
+                return mappedPermission;
+            }
+
+            return null;
         }
     }
 }

@@ -48,6 +48,95 @@ namespace PermissionsMS.DataAccess
                       .HasForeignKey(p => p.PermissionTypeId)
                       .OnDelete(DeleteBehavior.ClientSetNull);
             });
+
+            modelBuilder.Entity<PermissionType>().HasData(
+                new PermissionType
+                {
+                    Id = 1,
+                    Description = "Administrator"
+                },
+
+                new PermissionType
+                {
+                    Id = 2,
+                    Description = "Project Manager"
+                },
+
+                new PermissionType
+                {
+                    Id = 3,
+                    Description = "Scrum Master"
+                },
+
+                new PermissionType
+                {
+                    Id = 4,
+                    Description = "Product Owner"
+                },
+
+                new PermissionType
+                {
+                    Id = 5,
+                    Description = "Developer"
+                }
+            );
+
+            modelBuilder.Entity<Permission>().HasData(
+                
+                new Permission
+                {
+                    Id = 1,
+                    EmployeeForename = "Matías",
+                    EmployeeSurname = "Salinas",
+                    PermissionTypeId = 5,
+                    PermissionDate = DateTime.Now.Date
+                },
+
+                new Permission
+                {
+                    Id = 2,
+                    EmployeeForename = "Jose Luís",
+                    EmployeeSurname = "Fernández",
+                    PermissionTypeId = 5,
+                    PermissionDate = DateTime.Now.Date
+                },
+
+                new Permission
+                {
+                    Id = 3,
+                    EmployeeForename = "Rodrigo",
+                    EmployeeSurname = "Lago",
+                    PermissionTypeId = 3,
+                    PermissionDate = DateTime.Now.Date
+                },
+
+                new Permission
+                {
+                    Id = 4,
+                    EmployeeForename = "Lucas",
+                    EmployeeSurname = "Olivera",
+                    PermissionTypeId = 3,
+                    PermissionDate = DateTime.Now.Date
+                },
+
+                new Permission
+                {
+                    Id = 5,
+                    EmployeeForename = "Camilo",
+                    EmployeeSurname = "Ñañez",
+                    PermissionTypeId = 1,
+                    PermissionDate = DateTime.Now.Date
+                },
+
+                new Permission
+                {
+                    Id = 6,
+                    EmployeeForename = "Waldo",
+                    EmployeeSurname = "Hasperué",
+                    PermissionTypeId = 1,
+                    PermissionDate = DateTime.Now.Date
+                }
+            );
         }
 
         public virtual DbSet<Permission> Permissions { get; set; }

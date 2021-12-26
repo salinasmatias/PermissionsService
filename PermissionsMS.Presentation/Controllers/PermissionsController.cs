@@ -32,9 +32,9 @@ namespace PermissionsMS.Presentation.Controllers
             {
                 var route = Request.Path.Value;
                 var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-                var testimonials = await _business.GetAllPermissionsAsync(validFilter);
+                var permissions = await _business.GetAllPermissionsAsync(validFilter);
                 var totalRecords = _business.CountPermissions();
-                var pagedResponse = PaginationHelper.CreatePagedReponse<PermissionDtoForDisplay>(testimonials.ToList(),
+                var pagedResponse = PaginationHelper.CreatePagedReponse<PermissionDtoForDisplay>(permissions.ToList(),
                                                                                                    validFilter,
                                                                                                    totalRecords,
                                                                                                    _uriService,
@@ -42,10 +42,66 @@ namespace PermissionsMS.Presentation.Controllers
 
                 return new JsonResult(pagedResponse) { StatusCode = 200 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
                 return StatusCode(500, "Internal error");
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(PermissionDtoForDisplay), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorRequestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RequestPermission([FromBody] PermissionDtoForCreation permission)
+        {
+            try
+            {
+                var response = await _business.AddPermission(permission);
+
+                if(response != null)
+                {
+                    return new JsonResult(response) { StatusCode = 201 };
+                }
+
+                return new JsonResult(new ErrorRequestDto()) { StatusCode = 200 };
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal error");
+            }
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(PermissionDtoForDisplay), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorRequestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ModifyPermission(int id, [FromBody] PermissionDtoForEdit permission)
+        {
+            try
+            {
+                var response = await _business.GetPermissionByIdAsync(id);
+
+                if (response == null)
+                {
+                    return NotFound();
+                }
+
+                var updateResponse = await _business.UpdatePermission(response, permission);
+                if(updateResponse != null)
+                {
+                    return new JsonResult(permission) { StatusCode = 200 };
+                }
+
+                return new JsonResult(new ErrorRequestDto()) { StatusCode = 200 };
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal server error");
             }
         }
     }
