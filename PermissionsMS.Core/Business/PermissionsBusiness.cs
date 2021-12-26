@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PermissionsMS.Abstractions;
 using PermissionsMS.Core.Business.Interfaces;
 using PermissionsMS.Core.DTOs;
 using PermissionsMS.Entities;
@@ -31,6 +32,11 @@ namespace PermissionsMS.Core.Business
             return mappedPermission;
         }
 
+        public int CountPermissions()
+        {
+            return _repository.CountPermissions();
+        }
+
         public Permission DeletePermission(Permission permission)
         {
             _repository.DeletePermission(permission);
@@ -38,9 +44,11 @@ namespace PermissionsMS.Core.Business
             return permission;
         }
 
-        public Task<IEnumerable<PermissionDtoForDisplay>> GetAllPermissionsAsync()
+        public async Task<IEnumerable<PermissionDtoForDisplay>> GetAllPermissionsAsync(IPaginationFilter filter)
         {
-            throw new NotImplementedException();
+            var permissions = await _repository.PaginatedGetAllPermissionsAsync(filter);
+            var mappedPermissions = _mapper.Map<List<PermissionDtoForDisplay>>(permissions);
+            return mappedPermissions;
         }
 
         public Task<PermissionDtoForDisplay> GetPermissionByIdAsync(int id)

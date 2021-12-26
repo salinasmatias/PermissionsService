@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PermissionsMS.Abstractions;
+using PermissionsMS.Core.Business;
+using PermissionsMS.Core.Business.Interfaces;
+using PermissionsMS.Core.Helper;
 using PermissionsMS.DataAccess;
 using PermissionsMS.Repositories;
 using PermissionsMS.Repositories.Interfaces;
@@ -41,6 +46,16 @@ namespace PermissionsMS.Presentation
             services.AddDbContext<PermissionsContext>(options => options.UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IPermissionsRepository, PermissionsRepository>();
+            services.AddTransient<IPermissionsBusiness, PermissionsBusiness>();
+            services.AddTransient<IPaginationFilter, PaginationFilter>();
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

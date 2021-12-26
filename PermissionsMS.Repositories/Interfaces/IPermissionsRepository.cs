@@ -1,4 +1,5 @@
-﻿using PermissionsMS.Entities;
+﻿using PermissionsMS.Abstractions;
+using PermissionsMS.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace PermissionsMS.Repositories.Interfaces
         void UpdatePermission(Permission permission);
         void DeletePermission(Permission permission);
         IEnumerable<Permission> GetAllPermissionsAsync();
+        Task<IEnumerable<Permission>> PaginatedGetAllPermissionsAsync(IPaginationFilter filter);
+        int CountPermissions();
         Permission GetPermissionByIdAsync(int id);
     }
 }
