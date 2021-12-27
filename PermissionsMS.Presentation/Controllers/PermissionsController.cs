@@ -51,7 +51,7 @@ namespace PermissionsMS.Presentation.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(PermissionDtoForDisplay), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ErrorRequestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorRequestDto), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RequestPermission([FromBody] PermissionDtoForCreation permission)
@@ -65,7 +65,7 @@ namespace PermissionsMS.Presentation.Controllers
                     return new JsonResult(response) { StatusCode = 201 };
                 }
 
-                return new JsonResult(new ErrorRequestDto()) { StatusCode = 200 };
+                return new JsonResult(new ErrorRequestDto()) { StatusCode = 400 };
             }
             catch (Exception)
             {
@@ -76,7 +76,7 @@ namespace PermissionsMS.Presentation.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(PermissionDtoForDisplay), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorRequestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorRequestDto), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ModifyPermission(int id, [FromBody] PermissionDtoForEdit permission)
@@ -96,7 +96,7 @@ namespace PermissionsMS.Presentation.Controllers
                     return new JsonResult(permission) { StatusCode = 200 };
                 }
 
-                return new JsonResult(new ErrorRequestDto()) { StatusCode = 200 };
+                return new JsonResult(new ErrorRequestDto()) { StatusCode = 400 };
             }
             catch (Exception)
             {
